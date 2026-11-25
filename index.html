@@ -142,6 +142,18 @@
     .other-grid .mine { display: block; font-size: .7rem; color: var(--accent); }
     .dir-who { display: block; font-weight: bold; margin-bottom: 4px; }
 
+    /* ウイング */
+    .wing-row {
+      display: flex; gap: 12px; align-items: center;
+      background: var(--bg); border: 2px solid transparent;
+      border-radius: 14px; padding: 10px 14px; margin-bottom: 8px; font-size: .92rem;
+    }
+    .wing-row.strong { border-color: var(--accent); background: var(--accent-soft); }
+    .wing-emoji { font-size: 2rem; line-height: 1; }
+    .wing-pct { color: var(--sub); margin-left: 6px; }
+    .wing-tag { display: inline-block; font-size: .75rem; background: var(--accent); color: #fff; border-radius: 999px; padding: 0 10px; margin-left: 6px; }
+    .wing-trait { display: block; color: var(--sub); }
+
     .note { font-size: .8rem; color: var(--sub); margin-top: 24px; line-height: 1.6; }
 
     @media (max-width: 420px) {
@@ -211,7 +223,7 @@
 
       <div id="wingBlock">
         <h3>🪶 ウイング（となりのタイプの影響）</h3>
-        <p id="wing"></p>
+        <div id="wing"></div>
       </div>
     </div>
 
@@ -253,7 +265,8 @@
 const TYPES = {
   1: {
     emoji: "🦫", animal: "ビーバー", nickname: "コツコツきちんと職人",
-    center: "本能（おなか）", color: "#cfe3f3",
+    center: "本能（ガッツ）", color: "#cfe3f3",
+    wingTrait: "きちんとした几帳面さと正義感",
     summary: "毎日コツコツと木を運び、しっかりしたダムを造るビーバーのように、物事を「正しく、きちんと」仕上げたい人です。筋の通らないことや、いい加減なやり方が苦手。自分の中に高い理想のものさしを持っていて、世の中を少しでも良くしようと努力を続けます。",
     desire: "正しく、よい人でありたい",
     fear: "自分が間違っている・だめな人間だと思われること",
@@ -267,6 +280,7 @@ const TYPES = {
   2: {
     emoji: "🐕", animal: "イヌ", nickname: "あったかお世話係",
     center: "感情（ハート）", color: "#f7d6d6",
+    wingTrait: "人へのやさしさと面倒見のよさ",
     summary: "大好きな人のそばに寄り添い、元気がないとすぐ気づいてくれるイヌのように、人の役に立つことに喜びを感じる人です。相手の気持ちを察するのが上手で、気づけば誰かの世話を焼いています。人とのあたたかいつながりが、心のエネルギー源です。",
     desire: "愛されたい・必要とされたい",
     fear: "誰からも必要とされず、ひとりぼっちになること",
@@ -280,6 +294,7 @@ const TYPES = {
   3: {
     emoji: "🦚", animal: "クジャク", nickname: "キラキラ目標達成家",
     center: "感情（ハート）", color: "#d4ece4",
+    wingTrait: "目標に向かう行動力と華やかさ",
     summary: "美しい羽を広げて注目を集めるクジャクのように、自分の魅力や成果で輝きたい人です。目標を立ててそこへ向かうのが得意で、効率よく結果を出します。まわりから認められることが、大きなやる気につながります。",
     desire: "価値ある存在として認められたい",
     fear: "価値がない・失敗した人だと思われること",
@@ -293,6 +308,7 @@ const TYPES = {
   4: {
     emoji: "🐈", animal: "ネコ", nickname: "気まぐれな感性アーティスト",
     center: "感情（ハート）", color: "#e3d9f2",
+    wingTrait: "豊かな感性と自分らしさへのこだわり",
     summary: "群れずに自分の世界を大切にするネコのように、「自分らしさ」を何より大事にする人です。感受性が豊かで、美しいものや心の機微に敏感。ありきたりではない、自分だけの意味や表現を探し続けます。",
     desire: "自分らしさと、自分だけの存在意義を見つけたい",
     fear: "自分には特別なものが何もないこと",
@@ -305,7 +321,8 @@ const TYPES = {
   },
   5: {
     emoji: "🦉", animal: "フクロウ", nickname: "森のもの知り観察者",
-    center: "思考（あたま）", color: "#e8e1d2",
+    center: "思考（ヘッド）", color: "#e8e1d2",
+    wingTrait: "じっくり考える冷静さと探究心",
     summary: "木の上から静かに森を見渡すフクロウのように、一歩引いて物事をじっくり観察する人です。知ることが大好きで、興味を持った分野はとことん深く掘り下げます。自分の時間と空間をとても大切にします。",
     desire: "有能でいたい・物事を深く理解していたい",
     fear: "無力で、役に立たない存在になること",
@@ -318,7 +335,8 @@ const TYPES = {
   },
   6: {
     emoji: "🐺", animal: "オオカミ", nickname: "群れを守る忠実な仲間",
-    center: "思考（あたま）", color: "#dbe2ea",
+    center: "思考（ヘッド）", color: "#dbe2ea",
+    wingTrait: "慎重さと仲間への誠実さ",
     summary: "群れの仲間と強い絆で結ばれ、まわりを警戒しながら家族を守るオオカミのように、信頼と安心を大切にする人です。起こりうる危険を先に考えて備えるのが得意。一度信じた相手や組織には、とても誠実に尽くします。",
     desire: "安心していたい・信頼できる支えがほしい",
     fear: "頼れるものがなく、ひとりで取り残されること",
@@ -331,7 +349,8 @@ const TYPES = {
   },
   7: {
     emoji: "🦦", animal: "カワウソ", nickname: "好奇心いっぱいの遊び名人",
-    center: "思考（あたま）", color: "#fbe7c6",
+    center: "思考（ヘッド）", color: "#fbe7c6",
+    wingTrait: "明るさと好奇心",
     summary: "水の中をくるくる泳ぎ、何でもおもちゃにして遊んでしまうカワウソのように、人生を楽しむ天才です。好奇心旺盛で、新しいことにどんどん飛び込みます。明るく前向きで、まわりの空気を軽くしてくれる存在です。",
     desire: "満たされていたい・自由でいたい",
     fear: "痛みや退屈の中に閉じ込められること",
@@ -344,7 +363,8 @@ const TYPES = {
   },
   8: {
     emoji: "🦁", animal: "ライオン", nickname: "頼れる百獣のリーダー",
-    center: "本能（おなか）", color: "#f6dcc3",
+    center: "本能（ガッツ）", color: "#f6dcc3",
+    wingTrait: "力強さと決断力",
     summary: "堂々と群れを率いるライオンのように、力強さと決断力を持った人です。自分の道は自分で切り開き、人に支配されることを嫌います。いざというときには先頭に立ち、弱い立場の人を守ろうとする大きな器があります。",
     desire: "自分の力で人生を切り開きたい・大切なものを守りたい",
     fear: "人に支配されたり、傷つけられたりすること",
@@ -357,7 +377,8 @@ const TYPES = {
   },
   9: {
     emoji: "🐼", animal: "パンダ", nickname: "のんびり平和の使者",
-    center: "本能（おなか）", color: "#e2ecd6",
+    center: "本能（ガッツ）", color: "#e2ecd6",
+    wingTrait: "おだやかさと包容力",
     summary: "笹をのんびり食べながら、見ている人の心までなごませるパンダのように、おだやかで争いを好まない人です。まわりの人を受け入れる包容力があり、いるだけで場の空気がやわらぎます。どんな意見にも一理あると感じられる、ひろい心の持ち主です。",
     desire: "心の平和を保ちたい・人とおだやかにつながっていたい",
     fear: "争いによって関係が壊れること・自分を見失うこと",
@@ -580,10 +601,42 @@ function renderTypeDetail(no, isMine) {
     </button>`
   ).join("");
 
-  // 自分の結果のときだけ、ウイングとスコアを出す
-  $("wingBlock").hidden = !isMine;
+  // ウイング（ほかのタイプのときは点数なしで2つを紹介）
+  if (!isMine) renderWings(no, null);
+
+  // 自分の結果のときだけ、スコアを出す
   $("scoreCard").hidden = !isMine;
   $("backMineRow").hidden = isMine;
+}
+
+/* ウイング（となりの2タイプ）を書き出す。scores があれば点数と「強め」の印もつける */
+function renderWings(no, scores) {
+  const [a, b] = neighbors(no);
+  const stronger = !scores || scores[a] === scores[b] ? null : (scores[a] > scores[b] ? a : b);
+
+  const row = (w) => {
+    const pct = scores ? Math.round(scores[w] / MAX_PER_TYPE * 100) : null;
+    return `<div class="wing-row${w === stronger ? " strong" : ""}">
+      <span class="wing-emoji">${TYPES[w].emoji}</span>
+      <span class="wing-body">
+        <strong>${TYPES[w].animal}ウイング（タイプ${w}）</strong>
+        ${pct !== null ? `<span class="wing-pct">${pct}%</span>` : ""}
+        ${w === stronger ? '<span class="wing-tag">強め</span>' : ""}
+        <span class="wing-trait">${TYPES[w].wingTrait}が加わる</span>
+      </span>
+    </div>`;
+  };
+
+  let msg;
+  if (!scores) {
+    msg = `${TYPES[no].animal}タイプには、となり合う2つのウイングがあります。人によって、どちらの影響が強く出るかが違います。`;
+  } else if (stronger) {
+    msg = `ウイングはとなり合う2つのタイプで、あなたはどちらの影響も受けています。いまは${TYPES[stronger].emoji}${TYPES[stronger].animal}ウイングのほうが強めに出ています。`;
+  } else {
+    msg = `ウイングはとなり合う2つのタイプで、あなたはどちらの影響も同じくらい受けています。`;
+  }
+
+  $("wing").innerHTML = `<p class="sub">${msg}</p>${row(a)}${row(b)}`;
 }
 
 /* ほかのタイプをタップしたとき */
@@ -607,14 +660,8 @@ function renderResult(result) {
   // メインのタイプ
   renderTypeDetail(top, true);
 
-  // ウイング：となりの2タイプのうち点数が高いほう
-  const [a, b] = neighbors(top);
-  if (scores[a] === scores[b]) {
-    $("wing").textContent = `となりの${TYPES[a].emoji}${TYPES[a].animal}（タイプ${a}）と${TYPES[b].emoji}${TYPES[b].animal}（タイプ${b}）の両方の色をバランスよく持っています。`;
-  } else {
-    const w = scores[a] > scores[b] ? a : b;
-    $("wing").textContent = `となりのタイプのうち、${TYPES[w].emoji}${TYPES[w].animal}（タイプ${w}）の色が強めです。「${TYPES[w].nickname}」らしい一面も、あなたの個性に加わっています。`;
-  }
+  // ウイング：となりの2タイプを両方、点数つきで出す
+  renderWings(top, scores);
 
   // 9タイプの棒グラフ（1〜9の順）
   $("bars").innerHTML = [1,2,3,4,5,6,7,8,9].map(no => {

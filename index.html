@@ -126,6 +126,22 @@
     .bar-fill { height: 100%; border-radius: 999px; }
     .bar-pct { text-align: right; color: var(--sub); }
 
+    /* ほかのタイプ一覧のボタン */
+    .other-grid button {
+      background: var(--bg);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 10px 4px;
+      font-family: inherit;
+      font-size: .8rem;
+      color: var(--sub);
+      cursor: pointer;
+    }
+    .other-grid button:hover { border-color: var(--accent); }
+    .other-grid button.current { border-color: var(--accent); background: var(--accent-soft); color: var(--text); font-weight: bold; }
+    .other-grid .mine { display: block; font-size: .7rem; color: var(--accent); }
+    .dir-who { display: block; font-weight: bold; margin-bottom: 4px; }
+
     .note { font-size: .8rem; color: var(--sub); margin-top: 24px; line-height: 1.6; }
 
     @media (max-width: 420px) {
@@ -187,19 +203,33 @@
       <p id="growth"></p>
 
       <h3>🔄 心の状態による変化</h3>
+      <p class="sub">タイプが変わるわけではありません。そのときの心の状態によって、ほかのタイプの一面が表に出てくる、という考え方です。</p>
       <div class="two-col">
         <div class="mini" id="goodDir"></div>
         <div class="mini" id="stressDir"></div>
       </div>
 
-      <h3>🪶 ウイング（となりのタイプの影響）</h3>
-      <p id="wing"></p>
+      <div id="wingBlock">
+        <h3>🪶 ウイング（となりのタイプの影響）</h3>
+        <p id="wing"></p>
+      </div>
     </div>
 
-    <div class="card section">
+    <!-- 自分のスコア（ほかのタイプを見ているときは隠す） -->
+    <div class="card section" id="scoreCard">
       <h2>9タイプのスコア</h2>
       <div class="bars" id="bars"></div>
       <p class="sub" id="closeNote" style="margin-top:12px"></p>
+    </div>
+
+    <!-- ほかのタイプも見られる一覧 -->
+    <div class="card section">
+      <h2>ほかのタイプも見てみる</h2>
+      <p class="sub">動物をタップすると、そのタイプの説明が見られます。</p>
+      <div class="animal-grid other-grid" id="otherGrid"></div>
+      <div class="center" id="backMineRow" hidden>
+        <button type="button" class="btn" id="backMineBtn">自分の結果にもどる</button>
+      </div>
     </div>
 
     <div class="btn-row">
@@ -231,8 +261,8 @@ const TYPES = {
     pitfalls: ["「〜すべき」が多くなり、自分にも人にも厳しくなる", "怒りを表に出さずにため込み、イライラが続く", "完璧でないと満足できず、休むのが下手"],
     growth: "「100点でなくても十分よい」と自分に許可を出してみましょう。間違いは悪ではなく、学びの材料です。予定のない楽しみの時間をあえて作ると、心に余白が生まれます。",
     good: 7, stress: 4,
-    goodText: "肩の力が抜けて、カワウソのように遊び心を楽しめるようになります。",
-    stressText: "ネコのように落ち込み、「誰もわかってくれない」と感じやすくなります。"
+    goodText: "「ちゃんとしなきゃ」が少しゆるみ、遊び心やユーモアが顔を出します。完璧でなくても、その場を楽しめるようになります。",
+    stressText: "「どうせ誰もわかってくれない」と気持ちが沈み、ひとりで落ち込みやすくなります。"
   },
   2: {
     emoji: "🐕", animal: "イヌ", nickname: "あったかお世話係",
@@ -244,8 +274,8 @@ const TYPES = {
     pitfalls: ["頼まれていないお世話までしてしまう", "自分の気持ちや疲れを後回しにして無理をする", "感謝されないと、ひそかに傷ついたり不満がたまる"],
     growth: "人を助ける前に「わたしは今、何を感じている？何がほしい？」と自分に聞いてみましょう。見返りを期待しないやさしさと、自分を大切にすることは両立できます。",
     good: 4, stress: 8,
-    goodText: "ネコのように自分の本当の気持ちに正直になり、自分らしさを大切にできます。",
-    stressText: "ライオンのように強引になり、「こんなにしてあげたのに」と怒りが出やすくなります。"
+    goodText: "人のためだけでなく、自分の本当の気持ちにも目を向けられるようになります。自分らしい表現やひとりの時間も大切にできます。",
+    stressText: "相手を思い通りに動かそうと強く出たり、「こんなにしてあげたのに」と怒りをぶつけたりしやすくなります。"
   },
   3: {
     emoji: "🦚", animal: "クジャク", nickname: "キラキラ目標達成家",
@@ -257,8 +287,8 @@ const TYPES = {
     pitfalls: ["「どう見られるか」を気にしすぎて、本音を見失う", "仕事や成果に没頭して、心や体を休めない", "失敗を隠したり、自分を大きく見せようとする"],
     growth: "「何かを成し遂げていない自分」にも価値があると知ることが大切です。結果ではなく、その過程で自分が何を感じていたかに目を向けると、本当にやりたいことが見えてきます。",
     good: 6, stress: 9,
-    goodText: "オオカミのように仲間と協力し、誠実に人のために力を使えます。",
-    stressText: "パンダのように無気力になり、やる気が出ずにぼんやりしやすくなります。"
+    goodText: "自分が目立つことより、仲間と力を合わせることに喜びを感じます。人に対して誠実で、裏表のない態度になれます。",
+    stressText: "急にやる気が抜けて、ぼんやりしたり、やるべきことから目をそらしたりしやすくなります。"
   },
   4: {
     emoji: "🐈", animal: "ネコ", nickname: "気まぐれな感性アーティスト",
@@ -270,8 +300,8 @@ const TYPES = {
     pitfalls: ["気分の浮き沈みに振り回されやすい", "人と比べて「自分には何かが欠けている」と感じる", "わかってもらえないと思い、殻にこもる"],
     growth: "気分が乗るのを待たず、小さなことでも「まず手を動かす」と気持ちが整います。今あるものに目を向け、ふつうの毎日の中にある美しさを味わってみましょう。",
     good: 1, stress: 2,
-    goodText: "ビーバーのように規律を持ち、理想を形にするために行動できます。",
-    stressText: "イヌのように人にしがみつき、相手の気を引こうとしやすくなります。"
+    goodText: "気分に左右されず、コツコツ手を動かせるようになります。理想を頭の中だけにとどめず、形にしていけます。",
+    stressText: "相手の気を引こうと尽くしすぎたり、離れていかないかと人にしがみついたりしやすくなります。"
   },
   5: {
     emoji: "🦉", animal: "フクロウ", nickname: "森のもの知り観察者",
@@ -283,8 +313,8 @@ const TYPES = {
     pitfalls: ["頭で考えるばかりで、行動に移すのが遅れる", "人づきあいを避け、ひとりにこもりがち", "気持ちを表に出さず、冷たく見られることがある"],
     growth: "「もっと知ってから」ではなく、今ある知識でまず一歩動いてみましょう。考えを人と分かち合うことで、知識はもっと生きたものになります。",
     good: 8, stress: 7,
-    goodText: "ライオンのように自信を持ち、知識を生かして力強く行動できます。",
-    stressText: "カワウソのように気が散って、あれこれ手を出し落ち着かなくなります。"
+    goodText: "考えるだけで終わらず、自信を持って決め、動けるようになります。蓄えた知識を、人のために力強く使えます。",
+    stressText: "落ち着きがなくなり、あれこれ手を出しては散らかりやすくなります。目の前の問題から気をそらそうとします。"
   },
   6: {
     emoji: "🐺", animal: "オオカミ", nickname: "群れを守る忠実な仲間",
@@ -296,8 +326,8 @@ const TYPES = {
     pitfalls: ["心配しすぎて、なかなか決められない", "人の言葉の裏を疑ってしまう", "不安から、逆に強気に反発してしまうことがある"],
     growth: "不安な気持ちが出てきたら「それは事実？それとも想像？」と区別してみましょう。答えは外だけでなく、自分の中にもあります。自分の判断を少しずつ信じる練習を。",
     good: 9, stress: 3,
-    goodText: "パンダのようにおおらかになり、落ち着いて人や自分を信頼できます。",
-    stressText: "クジャクのように焦って、無理に頑張りすぎたり見栄を張りやすくなります。"
+    goodText: "あれこれ心配する気持ちが静まり、ゆったりおおらかになれます。人のことも自分のことも、落ち着いて信頼できます。",
+    stressText: "不安を打ち消そうと必死に頑張りすぎたり、自分を大きく見せようとしたりしやすくなります。"
   },
   7: {
     emoji: "🦦", animal: "カワウソ", nickname: "好奇心いっぱいの遊び名人",
@@ -309,8 +339,8 @@ const TYPES = {
     pitfalls: ["飽きっぽく、物事を最後までやりきれない", "つらいことから目をそらし、楽しいことに逃げる", "予定を詰め込みすぎて、ひとつひとつが浅くなる"],
     growth: "「次の楽しいこと」を探す前に、今ここにあるものをじっくり味わってみましょう。つらい気持ちも少しだけ受け止めると、本当の満足感が得られます。",
     good: 5, stress: 1,
-    goodText: "フクロウのように一つのことに深く集中し、じっくり味わえるようになります。",
-    stressText: "ビーバーのようにイライラして、人や物事に批判的になりやすくなります。"
+    goodText: "次から次へと移らず、ひとつのことにじっくり向き合えるようになります。静かに考える時間も楽しめます。",
+    stressText: "思い通りにならないことにイライラし、まわりの人ややり方に厳しくダメ出ししやすくなります。"
   },
   8: {
     emoji: "🦁", animal: "ライオン", nickname: "頼れる百獣のリーダー",
@@ -322,8 +352,8 @@ const TYPES = {
     pitfalls: ["強引になり、まわりを威圧してしまう", "弱みを見せられず、なんでもひとりで背負う", "白黒をはっきりつけたがり、衝突しやすい"],
     growth: "本当の強さは、やわらかさや弱さを見せられることにもあります。信頼できる人に頼ったり、相手のペースに合わせたりすることで、さらに大きな力が生まれます。",
     good: 2, stress: 5,
-    goodText: "イヌのようにやさしさを素直に表し、人の心に寄り添えるようになります。",
-    stressText: "フクロウのように引きこもり、人を遠ざけて自分の殻にこもりやすくなります。"
+    goodText: "強さの奥にあるやさしさを、素直に見せられるようになります。相手の気持ちに寄り添い、思いやりを持って動けます。",
+    stressText: "人と距離を置いて自分の殻に閉じこもり、誰にも頼らずひとりで抱え込みやすくなります。"
   },
   9: {
     emoji: "🐼", animal: "パンダ", nickname: "のんびり平和の使者",
@@ -335,8 +365,8 @@ const TYPES = {
     pitfalls: ["自分の意見や望みを後回しにしてしまう", "めんどうなことを先延ばしにしがち", "対立を避けるあまり、問題を見ないふりをする"],
     growth: "「わたしはどうしたい？」を小さなことから口に出してみましょう。あなたの意見は、場を乱すものではなく、まわりにとっても大切な情報です。",
     good: 3, stress: 6,
-    goodText: "クジャクのように目標を持って、自分から主体的に動けるようになります。",
-    stressText: "オオカミのように不安や心配が強くなり、あれこれ気をもみやすくなります。"
+    goodText: "自分の目標を持ち、自分から進んで動けるようになります。自分の力を発揮する喜びを感じられます。",
+    stressText: "先のことが急に心配になり、人の意見に振り回されたり、疑い深くなったりしやすくなります。"
   }
 };
 
@@ -516,16 +546,17 @@ function neighbors(no) {
   return [no === 1 ? 9 : no - 1, no === 9 ? 1 : no + 1];
 }
 
-function renderResult({ scores }) {
-  // 点数の高い順に並べる
-  const ranking = Object.keys(scores).map(Number).sort((a, b) => scores[b] - scores[a]);
-  const top = ranking[0];
-  const t = TYPES[top];
+let myResult = null; // 今表示している自分の診断結果
+let myTop = null;    // 自分のタイプ番号
 
-  // メインのタイプ
+/* 1つのタイプの説明を画面に書き出す（自分のタイプにも、ほかのタイプにも使う） */
+function renderTypeDetail(no, isMine) {
+  const t = TYPES[no];
+  const g = TYPES[t.good], s = TYPES[t.stress];
+
   $("hero").style.background = t.color;
   $("hero").innerHTML = `
-    <div class="type-no">あなたは タイプ${top}</div>
+    <div class="type-no">${isMine ? "あなたは " : ""}タイプ${no}</div>
     <div class="emoji">${t.emoji}</div>
     <div class="animal">${t.animal}</div>
     <div class="nickname">「${t.nickname}」</div>
@@ -533,11 +564,48 @@ function renderResult({ scores }) {
   $("summary").textContent = t.summary;
   $("desire").textContent = t.desire;
   $("fear").textContent = t.fear;
-  $("strengths").innerHTML = t.strengths.map(s => `<li>${s}</li>`).join("");
-  $("pitfalls").innerHTML = t.pitfalls.map(s => `<li>${s}</li>`).join("");
+  $("strengths").innerHTML = t.strengths.map(x => `<li>${x}</li>`).join("");
+  $("pitfalls").innerHTML = t.pitfalls.map(x => `<li>${x}</li>`).join("");
   $("growth").textContent = t.growth;
-  $("goodDir").innerHTML = `<strong>☀️ 心に余裕があるとき → ${TYPES[t.good].emoji}</strong>${t.goodText}`;
-  $("stressDir").innerHTML = `<strong>🌀 ストレスがかかったとき → ${TYPES[t.stress].emoji}</strong>${t.stressText}`;
+  $("goodDir").innerHTML = `<strong>☀️ 心に余裕があるとき</strong>
+    <span class="dir-who">${g.emoji}${g.animal}（タイプ${t.good}）の良い面が出てきます</span>${t.goodText}`;
+  $("stressDir").innerHTML = `<strong>🌀 ストレスがかかったとき</strong>
+    <span class="dir-who">${s.emoji}${s.animal}（タイプ${t.stress}）の悪い面が出やすくなります</span>${t.stressText}`;
+
+  // ほかのタイプの一覧（今見ているタイプに印をつける）
+  $("otherGrid").innerHTML = [1,2,3,4,5,6,7,8,9].map(n =>
+    `<button type="button" data-no="${n}" class="${n === no ? "current" : ""}">
+      <span class="emoji">${TYPES[n].emoji}</span>${n}. ${TYPES[n].animal}
+      ${n === myTop ? '<span class="mine">あなた</span>' : ""}
+    </button>`
+  ).join("");
+
+  // 自分の結果のときだけ、ウイングとスコアを出す
+  $("wingBlock").hidden = !isMine;
+  $("scoreCard").hidden = !isMine;
+  $("backMineRow").hidden = isMine;
+}
+
+/* ほかのタイプをタップしたとき */
+$("otherGrid").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-no]");
+  if (!btn) return;
+  const no = Number(btn.dataset.no);
+  if (no === myTop) renderResult(myResult);
+  else { renderTypeDetail(no, false); window.scrollTo(0, 0); }
+});
+$("backMineBtn").addEventListener("click", () => renderResult(myResult));
+
+function renderResult(result) {
+  const { scores } = result;
+  // 点数の高い順に並べる
+  const ranking = Object.keys(scores).map(Number).sort((a, b) => scores[b] - scores[a]);
+  const top = ranking[0];
+  myResult = result;
+  myTop = top;
+
+  // メインのタイプ
+  renderTypeDetail(top, true);
 
   // ウイング：となりの2タイプのうち点数が高いほう
   const [a, b] = neighbors(top);
